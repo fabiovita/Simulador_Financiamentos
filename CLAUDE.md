@@ -32,6 +32,22 @@ Projeto de arquivo único (`app.py`) — um dashboard financeiro Streamlit para 
 
 **Dependências principais:** `streamlit`, `yfinance`, `pandas`, `plotly`
 
+## Repositório GitHub
+
+- **URL:** https://github.com/fabiovita/Projeto_Claude_Code
+- **Usuário:** fabiovita
+- **Branch principal:** `main`
+
+### Sincronização Automática
+
+Um hook `PostToolUse` em `.claude/settings.json` executa automaticamente após cada edição de arquivo:
+
+```bash
+git add -A && git commit -m "Auto-update: <data/hora>" && git push
+```
+
+Toda alteração feita pelo Claude Code é enviada automaticamente ao GitHub sem intervenção manual.
+
 ## Pontos de Atenção
 
 - yfinance retorna colunas multi-índice quando múltiplas ações são buscadas — o código trata isso explicitamente ao achatar os nomes de colunas.

@@ -10,8 +10,8 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("📈 Dashboard de Ações B3")
-st.markdown("Análise de performance: **Petrobras (PETR4)**, **Itaú (ITUB4)** e **Vale (VALE3)**")
+st.title("📈 Dashboard de Ações B3 + Cripto")
+st.markdown("Análise de performance: **Petrobras (PETR4)**, **Itaú (ITUB4)**, **Vale (VALE3)** e **Bitcoin (BTC)**")
 
 # --- Sidebar ---
 st.sidebar.header("Configurações")
