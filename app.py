@@ -151,7 +151,7 @@ for ticker in tickers_selecionados:
         name=cfg["nome"],
         marker_color=cfg["cor"],
         opacity=0.7,
-        hovertemplate=f"<b>{cfg['nome']}</b><br>Data: %{{x|%d/%m/%Y}}<br>Volume: %{{y:,.0f}}<extra></extra>"
+        hovertemplate=f"<b>{cfg['nome']}</b><br>Data: %{{x|%d/%m/%Y}}<br>Volume: %{{y:,.0f}} ({cfg['moeda']})<extra></extra>"
     ))
 fig_volume.update_layout(
     xaxis_title="Data",
