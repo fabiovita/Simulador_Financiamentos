@@ -11,3 +11,6 @@ venv/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Claude
+.claude/settings.json
