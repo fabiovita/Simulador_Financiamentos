@@ -24,6 +24,7 @@ class Emprestimo:
     num_parcelas: int
     primeira_parcela: str  # ISO date string "YYYY-MM-DD"
     carencia: int = 0
+    carencia_tipo: str = "capitalizado"  # "capitalizado" | "juros_pagos"
     parcelas_pagas: int = 0
     status: str = "ativo"  # "ativo" ou "quitado"
     id: Optional[int] = None

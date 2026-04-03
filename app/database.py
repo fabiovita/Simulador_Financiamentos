@@ -48,6 +48,10 @@ def init_db():
             con.execute("ALTER TABLE emprestimos ADD COLUMN carencia INTEGER DEFAULT 0")
         except Exception:
             pass
+        try:
+            con.execute("ALTER TABLE emprestimos ADD COLUMN carencia_tipo TEXT DEFAULT 'capitalizado'")
+        except Exception:
+            pass
 
 
 # ── Clientes ──────────────────────────────────────────────────────────────────
@@ -100,11 +104,11 @@ def inserir_emprestimo(e: Emprestimo) -> int:
         cur = con.execute(
             """INSERT INTO emprestimos
                (cliente_id, credor, produto, tabela, valor_liquido, taxa_mensal,
-                num_parcelas, primeira_parcela, parcelas_pagas, status, carencia)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                num_parcelas, primeira_parcela, parcelas_pagas, status, carencia, carencia_tipo)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (e.cliente_id, e.credor, e.produto, e.tabela, e.valor_liquido,
              e.taxa_mensal, e.num_parcelas, e.primeira_parcela,
-             e.parcelas_pagas, e.status, e.carencia),
+             e.parcelas_pagas, e.status, e.carencia, e.carencia_tipo),
         )
         return cur.lastrowid
 
@@ -113,7 +117,7 @@ def listar_emprestimos(cliente_id: int) -> List[Emprestimo]:
     with _conn() as con:
         rows = con.execute(
             """SELECT id, cliente_id, credor, produto, tabela, valor_liquido,
-                      taxa_mensal, num_parcelas, primeira_parcela, parcelas_pagas, status, carencia
+                      taxa_mensal, num_parcelas, primeira_parcela, parcelas_pagas, status, carencia, carencia_tipo
                FROM emprestimos WHERE cliente_id = ? ORDER BY primeira_parcela""",
             (cliente_id,),
         ).fetchall()
@@ -124,7 +128,7 @@ def buscar_emprestimo(emprestimo_id: int) -> Optional[Emprestimo]:
     with _conn() as con:
         r = con.execute(
             """SELECT id, cliente_id, credor, produto, tabela, valor_liquido,
-                      taxa_mensal, num_parcelas, primeira_parcela, parcelas_pagas, status, carencia
+                      taxa_mensal, num_parcelas, primeira_parcela, parcelas_pagas, status, carencia, carencia_tipo
                FROM emprestimos WHERE id = ?""",
             (emprestimo_id,),
         ).fetchone()
@@ -136,10 +140,11 @@ def atualizar_emprestimo(e: Emprestimo):
         con.execute(
             """UPDATE emprestimos SET credor=?, produto=?, tabela=?, valor_liquido=?,
                taxa_mensal=?, num_parcelas=?, primeira_parcela=?, parcelas_pagas=?, status=?,
-               carencia=?
+               carencia=?, carencia_tipo=?
                WHERE id=?""",
             (e.credor, e.produto, e.tabela, e.valor_liquido, e.taxa_mensal,
-             e.num_parcelas, e.primeira_parcela, e.parcelas_pagas, e.status, e.carencia, e.id),
+             e.num_parcelas, e.primeira_parcela, e.parcelas_pagas, e.status,
+             e.carencia, e.carencia_tipo, e.id),
         )
 
 
@@ -154,4 +159,5 @@ def _row_to_emprestimo(r) -> Emprestimo:
         valor_liquido=r[5], taxa_mensal=r[6], num_parcelas=r[7],
         primeira_parcela=r[8], parcelas_pagas=r[9], status=r[10],
         carencia=r[11] if len(r) > 11 and r[11] is not None else 0,
+        carencia_tipo=r[12] if len(r) > 12 and r[12] is not None else "capitalizado",
     )

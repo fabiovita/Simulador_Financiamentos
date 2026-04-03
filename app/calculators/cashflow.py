@@ -28,9 +28,9 @@ def gerar_fluxo_caixa(emprestimos: List[Emprestimo], meses: int = 24) -> pd.Data
         primeira = date.fromisoformat(emp.primeira_parcela)
 
         if emp.tabela == "SAC":
-            df = calcular_sac(emp.valor_liquido, emp.taxa_mensal, emp.num_parcelas, primeira, emp.carencia)
+            df = calcular_sac(emp.valor_liquido, emp.taxa_mensal, emp.num_parcelas, primeira, emp.carencia, emp.carencia_tipo)
         else:
-            df = calcular_price(emp.valor_liquido, emp.taxa_mensal, emp.num_parcelas, primeira, emp.carencia)
+            df = calcular_price(emp.valor_liquido, emp.taxa_mensal, emp.num_parcelas, primeira, emp.carencia, emp.carencia_tipo)
 
         # Filtra apenas parcelas futuras (a partir deste mês)
         limite = hoje + relativedelta(months=meses)
