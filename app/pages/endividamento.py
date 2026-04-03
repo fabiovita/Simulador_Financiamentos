@@ -14,9 +14,9 @@ def _saldo_atual(emp: Emprestimo) -> float:
     """Calcula saldo devedor estimado com base nas parcelas pagas."""
     primeira = date.fromisoformat(emp.primeira_parcela)
     if emp.tabela == "SAC":
-        df = calcular_sac(emp.valor_liquido, emp.taxa_mensal, emp.num_parcelas, primeira, emp.carencia)
+        df = calcular_sac(emp.valor_liquido, emp.taxa_mensal, emp.num_parcelas, primeira, emp.carencia, emp.carencia_tipo)
     else:
-        df = calcular_price(emp.valor_liquido, emp.taxa_mensal, emp.num_parcelas, primeira, emp.carencia)
+        df = calcular_price(emp.valor_liquido, emp.taxa_mensal, emp.num_parcelas, primeira, emp.carencia, emp.carencia_tipo)
 
     pagas = min(emp.parcelas_pagas, len(df))
     if pagas == 0:
@@ -56,10 +56,10 @@ def render():
     if ativos:
         total_divida = sum(_saldo_atual(e) for e in ativos)
         total_parcela = sum(
-            calcular_sac(e.valor_liquido, e.taxa_mensal, e.num_parcelas, date.fromisoformat(e.primeira_parcela), e.carencia)
+            calcular_sac(e.valor_liquido, e.taxa_mensal, e.num_parcelas, date.fromisoformat(e.primeira_parcela), e.carencia, e.carencia_tipo)
             .iloc[e.parcelas_pagas]["prestacao"]
             if e.tabela == "SAC"
-            else calcular_price(e.valor_liquido, e.taxa_mensal, e.num_parcelas, date.fromisoformat(e.primeira_parcela), e.carencia)
+            else calcular_price(e.valor_liquido, e.taxa_mensal, e.num_parcelas, date.fromisoformat(e.primeira_parcela), e.carencia, e.carencia_tipo)
             .iloc[min(e.parcelas_pagas, e.num_parcelas - 1)]["prestacao"]
             for e in ativos
         )
@@ -109,10 +109,18 @@ def render():
                 c6, c7, c8, c9 = st.columns(4)
                 parcelas = c6.number_input("Parcelas *", min_value=1, max_value=360, value=None,
                                            placeholder="Ex: 36")
-                primeira = c7.date_input("Início *", value=date.today())
+                primeira = c7.date_input("Início *", value=date.today(), format="DD/MM/YYYY")
                 carencia = c8.number_input("Carência", min_value=0, max_value=360, value=0, step=1,
                                            help="Meses sem pagamento")
                 pagas = c9.number_input("Pagas", min_value=0, max_value=360, value=0)
+
+                carencia_tipo = st.selectbox(
+                    "Tipo de carência",
+                    ["capitalizado", "juros_pagos"],
+                    format_func=lambda x: "Juros capitalizados (sem pagamento)" if x == "capitalizado" else "Juros pagos no período",
+                    help="Juros capitalizados: sem pagamento durante a carência, juros acumulam no saldo. "
+                         "Juros pagos: paga apenas os juros mensais durante a carência, saldo não se altera.",
+                )
 
                 col_s, col_c = st.columns(2)
                 salvar = col_s.form_submit_button("Salvar financiamento", type="primary")
@@ -139,6 +147,7 @@ def render():
                         num_parcelas=int(parcelas),
                         primeira_parcela=primeira.isoformat(),
                         carencia=int(carencia),
+                        carencia_tipo=carencia_tipo,
                         parcelas_pagas=int(pagas),
                     ))
                     st.session_state["mostrar_form_emprestimo"] = False
@@ -169,9 +178,10 @@ def render():
             col3.metric("Parcelas", f"{restantes}/{emp.num_parcelas}")
             col4.metric("Taxa", f"{emp.taxa_mensal*100:.2f}%")
 
-            info_parts = [emp.tabela, f"Próxima: {proxima.strftime('%d/%m/%y')}"]
+            info_parts = [emp.tabela, f"Próxima: {proxima.strftime('%d/%m/%Y')}"]
             if emp.carencia > 0:
-                info_parts.append(f"Carência: {emp.carencia}m")
+                tipo_label = "cap." if emp.carencia_tipo == "capitalizado" else "juros pagos"
+                info_parts.append(f"Carência: {emp.carencia}m ({tipo_label})")
             col5, col6, col7 = st.columns([3, 1, 1])
             col5.caption("  ·  ".join(info_parts))
 
@@ -190,23 +200,34 @@ def render():
                     c1, c2 = st.columns(2)
                     credor_e = c1.text_input("Credor", value=emp.credor)
                     produto_e = c2.text_input("Produto", value=emp.produto or "")
-                    c3, c4, c5 = st.columns(3)
+                    c3, c4, c5, c5b = st.columns(4)
                     tabela_e = c3.selectbox("Tabela", ["PRICE", "SAC"], index=0 if emp.tabela == "PRICE" else 1)
-                    taxa_e = c4.number_input("Taxa (%)", value=round(emp.taxa_mensal * 100, 4), step=0.01)
-                    parcelas_e = c5.number_input("Parcelas", value=emp.num_parcelas, min_value=1, max_value=360)
-                    c6, c7, c8 = st.columns(3)
-                    carencia_e = c6.number_input("Carência", value=emp.carencia, min_value=0, max_value=360, step=1)
-                    pagas_e = c7.number_input("Pagas", value=emp.parcelas_pagas, min_value=0)
-                    status_e = c8.selectbox("Status", ["ativo", "quitado"], index=0 if emp.status == "ativo" else 1)
+                    valor_e = c4.number_input("Valor (R$)", value=emp.valor_liquido, min_value=0.0, step=1000.0)
+                    taxa_e = c5.number_input("Taxa (%)", value=round(emp.taxa_mensal * 100, 4), step=0.01)
+                    parcelas_e = c5b.number_input("Parcelas", value=emp.num_parcelas, min_value=1, max_value=360)
+                    c6, c7, c8, c9 = st.columns(4)
+                    primeira_e = c6.date_input("Início", value=date.fromisoformat(emp.primeira_parcela), format="DD/MM/YYYY")
+                    carencia_e = c7.number_input("Carência", value=emp.carencia, min_value=0, max_value=360, step=1)
+                    pagas_e = c8.number_input("Pagas", value=emp.parcelas_pagas, min_value=0)
+                    status_e = c9.selectbox("Status", ["ativo", "quitado"], index=0 if emp.status == "ativo" else 1)
+                    carencia_tipo_e = st.selectbox(
+                        "Tipo de carência",
+                        ["capitalizado", "juros_pagos"],
+                        index=0 if emp.carencia_tipo == "capitalizado" else 1,
+                        format_func=lambda x: "Juros capitalizados (sem pagamento)" if x == "capitalizado" else "Juros pagos no período",
+                    )
                     salvar_e = st.form_submit_button("Salvar")
 
                 if salvar_e:
                     emp.credor = credor_e
                     emp.produto = produto_e
                     emp.tabela = tabela_e
+                    emp.valor_liquido = float(valor_e)
                     emp.taxa_mensal = taxa_e / 100
                     emp.num_parcelas = int(parcelas_e)
+                    emp.primeira_parcela = primeira_e.isoformat()
                     emp.carencia = int(carencia_e)
+                    emp.carencia_tipo = carencia_tipo_e
                     emp.parcelas_pagas = int(pagas_e)
                     emp.status = status_e
                     db.atualizar_emprestimo(emp)

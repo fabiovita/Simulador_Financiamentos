@@ -43,8 +43,15 @@ def render():
     emp_ref_id = emp_ref.id if emp_ref else None
     if st.session_state.get("_sim_emp_ref_id") != emp_ref_id:
         st.session_state["_sim_emp_ref_id"] = emp_ref_id
-        for key in ("sim_valor", "sim_taxa", "sim_parcelas", "sim_carencia"):
-            st.session_state.pop(key, None)
+        if emp_ref:
+            st.session_state["sim_valor"]         = float(emp_ref.valor_liquido)
+            st.session_state["sim_taxa"]          = round(emp_ref.taxa_mensal * 100, 4)
+            st.session_state["sim_parcelas"]      = int(emp_ref.num_parcelas)
+            st.session_state["sim_carencia"]      = int(emp_ref.carencia)
+            st.session_state["sim_carencia_tipo"] = emp_ref.carencia_tipo
+        else:
+            for key in ("sim_valor", "sim_taxa", "sim_parcelas", "sim_carencia", "sim_carencia_tipo"):
+                st.session_state.pop(key, None)
 
     default_valor = emp_ref.valor_liquido if emp_ref else None
     default_taxa = round(emp_ref.taxa_mensal * 100, 4) if emp_ref else None
@@ -56,15 +63,22 @@ def render():
     with st.container(border=True):
         st.subheader("Parâmetros")
         c1, c2, c3 = st.columns(3)
-        valor = c1.number_input("Valor (R$)", min_value=0.0, value=default_valor, step=1000.0, placeholder="0,00", key="sim_valor")
-        taxa = c2.number_input("Taxa (%)", min_value=0.0, max_value=30.0, value=default_taxa, step=0.01, placeholder="0,00", key="sim_taxa",
+        valor = c1.number_input("Valor (R$)", min_value=0.0, step=1000.0, placeholder="0,00", key="sim_valor")
+        taxa = c2.number_input("Taxa (%)", min_value=0.0, max_value=30.0, step=0.01, placeholder="0,00", key="sim_taxa",
                                help="Taxa mensal fixa")
-        parcelas = c3.number_input("Parcelas", min_value=0, max_value=360, value=default_parcelas, placeholder="0", key="sim_parcelas")
+        parcelas = c3.number_input("Parcelas", min_value=0, max_value=360, placeholder="0", key="sim_parcelas")
 
-        c4, c5 = st.columns(2)
-        primeira = c4.date_input("Início", value=default_data)
-        carencia = c5.number_input("Carência", min_value=0, max_value=360, value=default_carencia,
+        c4, c5, c6 = st.columns(3)
+        primeira = c4.date_input("Início", value=default_data, format="DD/MM/YYYY")
+        carencia = c5.number_input("Carência", min_value=0, max_value=360,
                                    help="Meses sem pagamento", key="sim_carencia")
+        carencia_tipo = c6.selectbox(
+            "Tipo de carência",
+            ["capitalizado", "juros_pagos"],
+            format_func=lambda x: "Juros capitalizados" if x == "capitalizado" else "Juros pagos",
+            key="sim_carencia_tipo",
+            help="Capitalizado: juros acumulam no saldo. Juros pagos: paga só os juros durante a carência.",
+        )
 
     # Só calcula e exibe resultados se os campos obrigatórios estiverem preenchidos
     if not valor or not taxa or not parcelas:
@@ -74,8 +88,8 @@ def render():
     taxa_decimal = taxa / 100
     primeira_date = primeira if primeira else date.today()
 
-    df_sac = calcular_sac(valor, taxa_decimal, int(parcelas), primeira_date, int(carencia))
-    df_price = calcular_price(valor, taxa_decimal, int(parcelas), primeira_date, int(carencia))
+    df_sac = calcular_sac(valor, taxa_decimal, int(parcelas), primeira_date, int(carencia), carencia_tipo)
+    df_price = calcular_price(valor, taxa_decimal, int(parcelas), primeira_date, int(carencia), carencia_tipo)
 
     total_juros_sac = df_sac["juros"].sum()
     total_juros_price = df_price["juros"].sum()
@@ -115,7 +129,8 @@ def render():
         st.caption("SAC custa menos no total, parcelas iniciais maiores." if diferenca > 0
                    else "Custo semelhante entre os sistemas.")
         if carencia_int > 0:
-            st.caption(f"Carência: {carencia_int} meses (juros capitalizados)")
+            tipo_label = "juros capitalizados" if carencia_tipo == "capitalizado" else "juros pagos no período"
+            st.caption(f"Carência: {carencia_int} meses ({tipo_label})")
 
     # ── Gráficos ──────────────────────────────────────────────────────────────
     tab1, tab2 = st.tabs(["Evolução das Parcelas", "Saldo Devedor"])

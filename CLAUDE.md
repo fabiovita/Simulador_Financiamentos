@@ -42,6 +42,12 @@ app/
 - As calculadoras recebem parâmetros primitivos e retornam `pd.DataFrame`; são stateless e não acessam o banco
 - O cliente selecionado é propagado entre páginas via `st.session_state["cliente_selecionado_id"]`
 
+## Git
+
+- Commitar a cada mudança lógica completa e testada (ex: correção de cálculo, novo campo, ajuste de layout)
+- Não acumular todas as alterações da sessão em um único commit no final
+- Mensagens de commit em português, descrevendo o que mudou e por quê
+
 ## Convenções
 
 - `taxa_mensal` é sempre armazenada e manipulada em decimal (ex: `0.0132` = 1,32%)
