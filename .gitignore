@@ -14,3 +14,10 @@ venv/
 
 # Claude
 .claude/settings.json
+
+# Dados locais e documentos
+*.db
+*.pdf
+~$*
+*.xlsx
+*.xls

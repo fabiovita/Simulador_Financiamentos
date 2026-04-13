@@ -66,7 +66,7 @@ def render():
 
     resumo = df.groupby("mes")["prestacao"].sum().reset_index()
     resumo.columns = ["Mês", "Total"]
-    resumo["Mês"] = pd.to_datetime(resumo["Mês"]).dt.strftime("%B/%Y")
+    resumo["Mês"] = pd.to_datetime(resumo["Mês"]).dt.strftime("%m/%Y")
     resumo["Total"] = resumo["Total"].apply(
         lambda v: f"R$ {v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
     )
@@ -75,7 +75,7 @@ def render():
     for credor in pivot.columns:
         valores = pivot[credor].reset_index()
         valores.columns = ["mes", credor]
-        valores["mes"] = valores["mes"].dt.strftime("%B/%Y")
+        valores["mes"] = valores["mes"].dt.strftime("%m/%Y")
         valores[credor] = valores[credor].apply(
             lambda v: f"R$ {v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
         )
@@ -87,8 +87,10 @@ def render():
     total_periodo = df["prestacao"].sum()
     media_mensal = df.groupby("mes")["prestacao"].sum().mean()
     mes_pico = df.groupby("mes")["prestacao"].sum().idxmax()
+    num_meses = df["mes"].nunique()
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
     col1.metric("Total", f"R$ {total_periodo:,.0f}".replace(",", "."))
     col2.metric("Média/mês", f"R$ {media_mensal:,.0f}".replace(",", "."))
     col3.metric("Mês pico", pd.Timestamp(mes_pico).strftime("%m/%Y"))
+    col4.metric("Meses", num_meses)

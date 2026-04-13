@@ -107,7 +107,13 @@ def render():
     st.divider()
     st.subheader("Editar ou excluir cliente")
 
-    opcoes = {f"{c.nome} ({c.cnpj_cpf or 'sem CNPJ'})": c.id for c in db.listar_clientes()}
+    # Feedback persistente após salvar/excluir
+    if st.session_state.get("msg_clientes"):
+        st.success(st.session_state.pop("msg_clientes"))
+
+    todos = db.listar_clientes()
+    opcoes = {f"{c.nome} ({c.cnpj_cpf or 'sem CNPJ'})": c.id for c in todos}
+
     escolha = st.selectbox("Selecione o cliente", list(opcoes.keys()), index=None, placeholder="Escolha...")
 
     if escolha:
@@ -139,17 +145,25 @@ def render():
                 for e in erros:
                     st.error(e)
             else:
-                db.atualizar_cliente(Cliente(
-                    id=cliente.id,
-                    nome=nome_edit,
-                    cnpj_cpf=formatar_cnpj_cpf(cnpj_edit),
-                    email=email_edit.strip().lower(),
-                    telefone=formatar_telefone(tel_edit),
-                ))
-                st.success("Dados atualizados.")
-                st.rerun()
+                try:
+                    db.atualizar_cliente(Cliente(
+                        id=cliente.id,
+                        nome=nome_edit.strip(),
+                        cnpj_cpf=formatar_cnpj_cpf(cnpj_edit),
+                        email=email_edit.strip().lower(),
+                        telefone=formatar_telefone(tel_edit),
+                    ))
+                    st.session_state["msg_clientes"] = f"Cliente '{nome_edit.strip()}' atualizado."
+                except Exception as e:
+                    st.error(f"Erro ao salvar: {e}")
+                else:
+                    st.rerun()
 
         if excluir:
-            db.excluir_cliente(cliente.id)
-            st.success(f"Cliente '{cliente.nome}' excluído.")
-            st.rerun()
+            try:
+                db.excluir_cliente(cliente.id)
+                st.session_state["msg_clientes"] = f"Cliente '{cliente.nome}' excluído."
+            except Exception as e:
+                st.error(f"Erro ao excluir: {e}")
+            else:
+                st.rerun()
