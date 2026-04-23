@@ -21,3 +21,6 @@ venv/
 ~$*
 *.xlsx
 *.xls
+
+# Autenticação — nunca versionar senhas
+app/config_auth.yaml

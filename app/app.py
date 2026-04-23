@@ -1,6 +1,8 @@
 import streamlit as st
 import sys
 import os
+import yaml
+import streamlit_authenticator as stauth
 
 # Garante que o diretório do app está no path
 sys.path.insert(0, os.path.dirname(__file__))
@@ -11,6 +13,24 @@ from pages import clientes, endividamento, simulador, fluxo_caixa
 # ── Versão ────────────────────────────────────────────────────────────────────
 APP_VERSION = "1.0.0"
 APP_ULTIMA_MODIFICACAO = "20/04/2026"
+
+# ── Autenticação ──────────────────────────────────────────────────────────────
+_auth_path = os.path.join(os.path.dirname(__file__), "config_auth.yaml")
+with open(_auth_path) as _f:
+    _auth_config = yaml.safe_load(_f)
+
+authenticator = stauth.Authenticate(
+    _auth_config["credentials"],
+    _auth_config["cookie"]["name"],
+    _auth_config["cookie"]["key"],
+    _auth_config["cookie"]["expiry_days"],
+)
+authenticator.login()
+
+if not st.session_state.get("authentication_status"):
+    if st.session_state.get("authentication_status") is False:
+        st.error("Usuário ou senha incorretos.")
+    st.stop()
 
 # ── Inicialização ─────────────────────────────────────────────────────────────
 db.init_db()
@@ -193,6 +213,13 @@ with st.sidebar:
     st.divider()
 
     st.toggle("Modo escuro", key="dark_mode")
+    st.divider()
+
+    # Usuário logado e logout
+    nome_usuario = st.session_state.get("name", "")
+    if nome_usuario:
+        st.caption(f"👤 {nome_usuario}")
+    authenticator.logout("Sair", "sidebar")
     st.divider()
 
     paginas = ["Clientes", "Financiamentos", "Simulador SAC/PRICE", "Fluxo de Caixa"]
