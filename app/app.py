@@ -11,8 +11,8 @@ import database as db
 from pages import clientes, endividamento, simulador, fluxo_caixa, analise_proposta
 
 # ── Versão ────────────────────────────────────────────────────────────────────
-APP_VERSION = "1.0.0"
-APP_ULTIMA_MODIFICACAO = "20/04/2026"
+APP_VERSION = "1.1.0"
+APP_ULTIMA_MODIFICACAO = "10/09/2026"
 
 # ── Autenticação ──────────────────────────────────────────────────────────────
 _auth_path = os.path.join(os.path.dirname(__file__), "config_auth.yaml")
