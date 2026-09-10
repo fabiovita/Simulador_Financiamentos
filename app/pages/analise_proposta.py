@@ -426,6 +426,8 @@ def _salvas(cliente_id):
             "Líquido": _fmt(i.liquido_recebido),
             "Custo total": _fmt(i.custo_total),
             "TIR (a.a.)": _pct(i.tir_real_aa),
+            # 4 casas no mensal: com 2, taxas distintas viram o mesmo número
+            "TIR (a.m.)": _pct(i.tir_real_am, 4),
             "Salva em": s.criado_em or "",
         })
     st.dataframe(pd.DataFrame(linhas), use_container_width=True, hide_index=True)
