@@ -119,6 +119,54 @@ df_dias = calcular_sac(456_745.76, 0.0175, 42, date(2027, 4, 12),
 checa("1ª parcela, mês cheio (não reproduz o banco)", float(df_mes.iloc[0]["prestacao"]), 18_867.95, tol=0.5)
 checa("1ª parcela, pro-rata por dias (36 dias)", float(df_dias.iloc[0]["prestacao"]), 20_483.17, tol=0.5)
 
+# ── Colagem do plano ──────────────────────────────────────────────────────────
+print("\nLeitura do plano colado")
+from analise.colagem import ler
+
+# Linha completa do Sicoob: o valor da parcela é a 2ª coluna, não a amortização
+uma_linha = ler("1 12/04/2027 10.874,89 20.483,17 97,64 9.608,28 0,00 456.745,76")
+checa("linha completa — valor da parcela", uma_linha[0].valor_parcela, 20_483.17)
+
+duas_colunas = ler("12/04/2027\t20.483,17\n10/05/2027\t18.153,15")
+checa("duas colunas — 2ª parcela", duas_colunas[1].valor_parcela, 18_153.15)
+
+so_valores = ler("20.483,17\n18.153,15", primeiro_vencimento=date(2027, 4, 12))
+checa_bool("só valores — data gerada", so_valores[1].vencimento == date(2027, 5, 12))
+
+# O bloco inteiro colado do PDF precisa bater com o extrator, ignorando cabeçalho
+# e a linha do Plano de Carência (cujo prazo em dias viraria uma parcela de 180)
+b_colado = ler("\n".join(
+    f"{p.numero} {p.vencimento.strftime('%d/%m/%Y')} {p.amortizacao:.2f} "
+    f"{p.valor_parcela:.2f} {p.iof:.2f} {p.juros:.2f} 0,00 {p.saldo_devedor:.2f}"
+    for p in b.parcelas
+) + "\n1 07/03/2027 180 NÃO 411.593,42 45.152,34 456.745,76")
+checa("bloco colado — quantidade de parcelas", float(len(b_colado)), 42.0)
+checa("bloco colado — soma das parcelas", sum(p.valor_parcela for p in b_colado), 632_421.90)
+
+# ── Reconstrução pela capa ────────────────────────────────────────────────────
+print("\nReconstrução pela capa (sem o plano de pagamento)")
+from analise.modelo import Proposta as P
+from analise.reconstrucao import reconstruir, saldo_sugerido, PosFixadaSemPlano
+
+parcelas_capa = reconstruir(456_745.76, 0.0175, 42, date(2027, 4, 12), "SAC",
+                            data_base=date(2027, 3, 7))
+capa = P(data_proposta=date(2026, 9, 8), parcelas=parcelas_capa,
+         valor_contratado=411_593.42, valor_liberado=400_000.00,
+         iof=13_549.40, tac=2_000.00, financia_iof=False, financia_tac=False,
+         cet_aa_informado=0.279748, origem="capa")
+icapa = calcular(capa)
+checa("capa — 1ª parcela", parcelas_capa[0].valor_parcela, 20_483.17, tol=0.5)
+checa("capa — TIR contra a do plano real", icapa.tir_real_aa, ib.tir_real_aa, tol=0.0005)
+checa("capa — saldo sugerido para a carência", saldo_sugerido(411_593.42, 0.0175, 6),
+      456_745.76, tol=1.0)
+
+bloqueou = False
+try:
+    reconstruir(413_365.86, 0.0035, 48, date(2026, 10, 13), "PRICE", pos_fixada=True)
+except PosFixadaSemPlano:
+    bloqueou = True
+checa_bool("capa — pós-fixada é recusada", bloqueou)
+
 # ── Resultado ─────────────────────────────────────────────────────────────────
 print()
 if _falhas:
