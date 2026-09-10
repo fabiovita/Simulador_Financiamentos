@@ -80,6 +80,18 @@ def render():
             help="Capitalizado: juros acumulam no saldo. Juros pagos: paga só os juros durante a carência.",
         )
 
+        convencao = st.selectbox(
+            "Contagem de juros",
+            ["mes_cheio", "dias"],
+            format_func=lambda x: ("Mês cheio" if x == "mes_cheio"
+                                   else "Dias corridos (como os bancos calculam)"),
+            key="sim_convencao",
+            help="Mês cheio: um mês de juros por parcela, independente do calendário. "
+                 "Dias corridos: juros pro-rata pelos dias do período, base 30 — é o que "
+                 "reproduz o plano do banco quando o intervalo não é de 30 dias exatos. "
+                 "Para avaliar uma proposta já emitida, use a página Avaliar Proposta.",
+        )
+
     # Só calcula e exibe resultados se os campos obrigatórios estiverem preenchidos
     if not valor or not taxa or not parcelas:
         st.info("Preencha os parâmetros acima para visualizar a simulação.")
@@ -88,8 +100,10 @@ def render():
     taxa_decimal = taxa / 100
     primeira_date = primeira if primeira else date.today()
 
-    df_sac = calcular_sac(valor, taxa_decimal, int(parcelas), primeira_date, int(carencia), carencia_tipo)
-    df_price = calcular_price(valor, taxa_decimal, int(parcelas), primeira_date, int(carencia), carencia_tipo)
+    df_sac = calcular_sac(valor, taxa_decimal, int(parcelas), primeira_date,
+                          int(carencia), carencia_tipo, convencao=convencao)
+    df_price = calcular_price(valor, taxa_decimal, int(parcelas), primeira_date,
+                              int(carencia), carencia_tipo, convencao=convencao)
 
     total_juros_sac = df_sac["juros"].sum()
     total_juros_price = df_price["juros"].sum()
