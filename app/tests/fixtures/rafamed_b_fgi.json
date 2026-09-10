@@ -1,0 +1,409 @@
+{
+ "data_proposta": "2026-09-08",
+ "parcelas": [
+  {
+   "numero": 1,
+   "vencimento": "2027-04-12",
+   "valor_parcela": 20483.17,
+   "amortizacao": 10874.89,
+   "juros": 9608.28,
+   "iof": 192.62,
+   "saldo_devedor": 456745.76
+  },
+  {
+   "numero": 2,
+   "vencimento": "2027-05-10",
+   "valor_parcela": 18153.15,
+   "amortizacao": 10874.89,
+   "juros": 7278.26,
+   "iof": 217.58,
+   "saldo_devedor": 445870.87
+  },
+  {
+   "numero": 3,
+   "vencimento": "2027-06-10",
+   "valor_parcela": 18743.27,
+   "amortizacao": 10874.89,
+   "juros": 7868.38,
+   "iof": 245.23,
+   "saldo_devedor": 434995.98
+  },
+  {
+   "numero": 4,
+   "vencimento": "2027-07-12",
+   "valor_parcela": 18796.33,
+   "amortizacao": 10874.89,
+   "juros": 7921.44,
+   "iof": 273.76,
+   "saldo_devedor": 424121.09
+  },
+  {
+   "numero": 5,
+   "vencimento": "2027-08-10",
+   "valor_parcela": 17863.54,
+   "amortizacao": 10874.89,
+   "juros": 6988.65,
+   "iof": 299.62,
+   "saldo_devedor": 413246.2
+  },
+  {
+   "numero": 6,
+   "vencimento": "2027-09-10",
+   "valor_parcela": 18153.14,
+   "amortizacao": 10874.89,
+   "juros": 7278.25,
+   "iof": 326.25,
+   "saldo_devedor": 402371.31
+  },
+  {
+   "numero": 7,
+   "vencimento": "2027-10-11",
+   "valor_parcela": 17956.43,
+   "amortizacao": 10874.89,
+   "juros": 7081.54,
+   "iof": 326.25,
+   "saldo_devedor": 391496.42
+  },
+  {
+   "numero": 8,
+   "vencimento": "2027-11-10",
+   "valor_parcela": 17535.7,
+   "amortizacao": 10874.89,
+   "juros": 6660.81,
+   "iof": 326.25,
+   "saldo_devedor": 380621.53
+  },
+  {
+   "numero": 9,
+   "vencimento": "2027-12-10",
+   "valor_parcela": 17345.39,
+   "amortizacao": 10874.89,
+   "juros": 6470.5,
+   "iof": 326.25,
+   "saldo_devedor": 369746.64
+  },
+  {
+   "numero": 10,
+   "vencimento": "2028-01-10",
+   "valor_parcela": 17366.31,
+   "amortizacao": 10874.89,
+   "juros": 6491.42,
+   "iof": 326.25,
+   "saldo_devedor": 358871.75
+  },
+  {
+   "numero": 11,
+   "vencimento": "2028-02-10",
+   "valor_parcela": 17169.6,
+   "amortizacao": 10874.89,
+   "juros": 6294.71,
+   "iof": 326.25,
+   "saldo_devedor": 347996.86
+  },
+  {
+   "numero": 12,
+   "vencimento": "2028-03-10",
+   "valor_parcela": 16576.16,
+   "amortizacao": 10874.89,
+   "juros": 5701.27,
+   "iof": 326.25,
+   "saldo_devedor": 337121.97
+  },
+  {
+   "numero": 13,
+   "vencimento": "2028-04-10",
+   "valor_parcela": 16776.18,
+   "amortizacao": 10874.89,
+   "juros": 5901.29,
+   "iof": 326.25,
+   "saldo_devedor": 326247.08
+  },
+  {
+   "numero": 14,
+   "vencimento": "2028-05-10",
+   "valor_parcela": 16393.85,
+   "amortizacao": 10874.89,
+   "juros": 5518.96,
+   "iof": 326.25,
+   "saldo_devedor": 315372.19
+  },
+  {
+   "numero": 15,
+   "vencimento": "2028-06-12",
+   "valor_parcela": 16741.51,
+   "amortizacao": 10874.89,
+   "juros": 5866.62,
+   "iof": 326.25,
+   "saldo_devedor": 304497.3
+  },
+  {
+   "numero": 16,
+   "vencimento": "2028-07-10",
+   "valor_parcela": 15667.89,
+   "amortizacao": 10874.89,
+   "juros": 4793.0,
+   "iof": 326.25,
+   "saldo_devedor": 293622.41
+  },
+  {
+   "numero": 17,
+   "vencimento": "2028-08-10",
+   "valor_parcela": 15989.34,
+   "amortizacao": 10874.89,
+   "juros": 5114.45,
+   "iof": 326.25,
+   "saldo_devedor": 282747.52
+  },
+  {
+   "numero": 18,
+   "vencimento": "2028-09-11",
+   "valor_parcela": 15952.74,
+   "amortizacao": 10874.89,
+   "juros": 5077.85,
+   "iof": 326.25,
+   "saldo_devedor": 271872.63
+  },
+  {
+   "numero": 19,
+   "vencimento": "2028-10-10",
+   "valor_parcela": 15288.78,
+   "amortizacao": 10874.89,
+   "juros": 4413.89,
+   "iof": 326.25,
+   "saldo_devedor": 260997.74
+  },
+  {
+   "numero": 20,
+   "vencimento": "2028-11-10",
+   "valor_parcela": 15399.21,
+   "amortizacao": 10874.89,
+   "juros": 4524.32,
+   "iof": 326.25,
+   "saldo_devedor": 250122.85
+  },
+  {
+   "numero": 21,
+   "vencimento": "2028-12-11",
+   "valor_parcela": 15202.5,
+   "amortizacao": 10874.89,
+   "juros": 4327.61,
+   "iof": 326.25,
+   "saldo_devedor": 239247.96
+  },
+  {
+   "numero": 22,
+   "vencimento": "2029-01-10",
+   "valor_parcela": 14871.38,
+   "amortizacao": 10874.89,
+   "juros": 3996.49,
+   "iof": 326.25,
+   "saldo_devedor": 228373.07
+  },
+  {
+   "numero": 23,
+   "vencimento": "2029-02-14",
+   "valor_parcela": 15321.88,
+   "amortizacao": 10874.89,
+   "juros": 4446.99,
+   "iof": 326.25,
+   "saldo_devedor": 217498.18
+  },
+  {
+   "numero": 24,
+   "vencimento": "2029-03-12",
+   "valor_parcela": 14005.01,
+   "amortizacao": 10874.89,
+   "juros": 3130.12,
+   "iof": 326.25,
+   "saldo_devedor": 206623.29
+  },
+  {
+   "numero": 25,
+   "vencimento": "2029-04-10",
+   "valor_parcela": 14185.31,
+   "amortizacao": 10874.89,
+   "juros": 3310.42,
+   "iof": 326.25,
+   "saldo_devedor": 195748.4
+  },
+  {
+   "numero": 26,
+   "vencimento": "2029-05-10",
+   "valor_parcela": 14110.14,
+   "amortizacao": 10874.89,
+   "juros": 3235.25,
+   "iof": 326.25,
+   "saldo_devedor": 184873.51
+  },
+  {
+   "numero": 27,
+   "vencimento": "2029-06-11",
+   "valor_parcela": 14124.71,
+   "amortizacao": 10874.89,
+   "juros": 3249.82,
+   "iof": 326.25,
+   "saldo_devedor": 173998.62
+  },
+  {
+   "numero": 28,
+   "vencimento": "2029-07-10",
+   "valor_parcela": 13633.57,
+   "amortizacao": 10874.89,
+   "juros": 2758.68,
+   "iof": 326.25,
+   "saldo_devedor": 163123.73
+  },
+  {
+   "numero": 29,
+   "vencimento": "2029-08-10",
+   "valor_parcela": 13628.83,
+   "amortizacao": 10874.89,
+   "juros": 2753.94,
+   "iof": 326.25,
+   "saldo_devedor": 152248.84
+  },
+  {
+   "numero": 30,
+   "vencimento": "2029-09-10",
+   "valor_parcela": 13432.12,
+   "amortizacao": 10874.89,
+   "juros": 2557.23,
+   "iof": 326.25,
+   "saldo_devedor": 141373.95
+  },
+  {
+   "numero": 31,
+   "vencimento": "2029-10-10",
+   "valor_parcela": 13158.6,
+   "amortizacao": 10874.89,
+   "juros": 2283.71,
+   "iof": 326.25,
+   "saldo_devedor": 130499.06
+  },
+  {
+   "numero": 32,
+   "vencimento": "2029-11-12",
+   "valor_parcela": 13179.63,
+   "amortizacao": 10874.89,
+   "juros": 2304.74,
+   "iof": 326.25,
+   "saldo_devedor": 119624.17
+  },
+  {
+   "numero": 33,
+   "vencimento": "2029-12-10",
+   "valor_parcela": 12650.08,
+   "amortizacao": 10874.89,
+   "juros": 1775.19,
+   "iof": 326.25,
+   "saldo_devedor": 108749.28
+  },
+  {
+   "numero": 34,
+   "vencimento": "2030-01-10",
+   "valor_parcela": 12645.28,
+   "amortizacao": 10874.89,
+   "juros": 1770.39,
+   "iof": 326.25,
+   "saldo_devedor": 97874.39
+  },
+  {
+   "numero": 35,
+   "vencimento": "2030-02-11",
+   "valor_parcela": 12499.8,
+   "amortizacao": 10874.89,
+   "juros": 1624.91,
+   "iof": 326.25,
+   "saldo_devedor": 86999.5
+  },
+  {
+   "numero": 36,
+   "vencimento": "2030-03-11",
+   "valor_parcela": 12117.52,
+   "amortizacao": 10874.89,
+   "juros": 1242.63,
+   "iof": 326.25,
+   "saldo_devedor": 76124.61
+  },
+  {
+   "numero": 37,
+   "vencimento": "2030-04-10",
+   "valor_parcela": 12016.74,
+   "amortizacao": 10874.89,
+   "juros": 1141.85,
+   "iof": 326.25,
+   "saldo_devedor": 65249.72
+  },
+  {
+   "numero": 38,
+   "vencimento": "2030-05-10",
+   "valor_parcela": 11826.44,
+   "amortizacao": 10874.89,
+   "juros": 951.55,
+   "iof": 326.25,
+   "saldo_devedor": 54374.83
+  },
+  {
+   "numero": 39,
+   "vencimento": "2030-06-10",
+   "valor_parcela": 11661.73,
+   "amortizacao": 10874.89,
+   "juros": 786.84,
+   "iof": 326.25,
+   "saldo_devedor": 43499.94
+  },
+  {
+   "numero": 40,
+   "vencimento": "2030-07-10",
+   "valor_parcela": 11445.82,
+   "amortizacao": 10874.89,
+   "juros": 570.93,
+   "iof": 326.25,
+   "saldo_devedor": 32625.05
+  },
+  {
+   "numero": 41,
+   "vencimento": "2030-08-12",
+   "valor_parcela": 11293.94,
+   "amortizacao": 10874.89,
+   "juros": 419.05,
+   "iof": 326.25,
+   "saldo_devedor": 21750.16
+  },
+  {
+   "numero": 42,
+   "vencimento": "2030-09-10",
+   "valor_parcela": 11059.18,
+   "amortizacao": 10875.27,
+   "juros": 183.91,
+   "iof": 326.26,
+   "saldo_devedor": 10875.27
+  }
+ ],
+ "banco": "Sicoob",
+ "linha": "109922-CAPITAL DE GIRO ACIMA 365D FGI",
+ "sistema": "SAC DECRESCENTE",
+ "valor_proposta": 400000.0,
+ "valor_contratado": 411593.42,
+ "valor_liberado": 400000.0,
+ "iof": 13549.4,
+ "tac": 2000.0,
+ "seguro": 0.0,
+ "financia_iof": false,
+ "financia_tac": false,
+ "financia_seguro": false,
+ "despesas_adicionais": 11593.42,
+ "taxa_nominal_am": 0.0175,
+ "cet_aa_informado": 0.279748,
+ "indice_pos": null,
+ "perc_pos": 0.0,
+ "totais_impressos": {
+  "total_amortizacao": 456745.76,
+  "total_parcelas": 632421.9,
+  "total_iof": 13300.07,
+  "total_juros": 175676.14,
+  "num_parcelas": 42
+ },
+ "origem": "pdf",
+ "arquivo": "FGI Rafamed.pdf"
+}
