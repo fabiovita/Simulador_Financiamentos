@@ -8,11 +8,11 @@ import streamlit_authenticator as stauth
 sys.path.insert(0, os.path.dirname(__file__))
 
 import database as db
-from pages import clientes, endividamento, simulador, fluxo_caixa
+from pages import clientes, endividamento, simulador, fluxo_caixa, analise_proposta
 
 # ── Versão ────────────────────────────────────────────────────────────────────
-APP_VERSION = "1.0.0"
-APP_ULTIMA_MODIFICACAO = "20/04/2026"
+APP_VERSION = "1.1.0"
+APP_ULTIMA_MODIFICACAO = "10/09/2026"
 
 # ── Autenticação ──────────────────────────────────────────────────────────────
 _auth_path = os.path.join(os.path.dirname(__file__), "config_auth.yaml")
@@ -222,7 +222,7 @@ with st.sidebar:
     authenticator.logout("Sair", "sidebar")
     st.divider()
 
-    paginas = ["Clientes", "Financiamentos", "Simulador SAC/PRICE", "Fluxo de Caixa"]
+    paginas = ["Clientes", "Financiamentos", "Simulador SAC/PRICE", "Avaliar Proposta", "Fluxo de Caixa"]
     for p in paginas:
         ativo = st.session_state["pagina"] == p
         if st.button(p, use_container_width=True, type="primary" if ativo else "secondary"):
@@ -257,5 +257,7 @@ elif pagina == "Financiamentos":
     endividamento.render()
 elif pagina == "Simulador SAC/PRICE":
     simulador.render()
+elif pagina == "Avaliar Proposta":
+    analise_proposta.render()
 elif pagina == "Fluxo de Caixa":
     fluxo_caixa.render()
