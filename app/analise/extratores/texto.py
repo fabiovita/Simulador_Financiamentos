@@ -28,11 +28,14 @@ def extrair_texto(caminho_pdf: str) -> str:
             "O utilitário pdftotext não está instalado. Instale com: brew install poppler"
         )
 
+    # Captura bytes e decodifica aqui: com text=True o Python usa a codificação do
+    # sistema (cp1252 no servidor Windows), que não define o byte 0x8d do "Í" em UTF-8.
+    # No Windows esse erro morre na thread de leitura e stdout volta None, sem exceção.
     proc = subprocess.run(
-        ["pdftotext", "-layout", caminho_pdf, "-"],
+        ["pdftotext", "-enc", "UTF-8", "-layout", caminho_pdf, "-"],
         capture_output=True,
-        text=True,
     )
     if proc.returncode != 0:
-        raise RuntimeError(f"Falha ao ler o PDF: {proc.stderr.strip()}")
-    return proc.stdout
+        erro = proc.stderr.decode("utf-8", errors="replace").strip()
+        raise RuntimeError(f"Falha ao ler o PDF: {erro}")
+    return proc.stdout.decode("utf-8", errors="replace")

@@ -167,6 +167,28 @@ except PosFixadaSemPlano:
     bloqueou = True
 checa_bool("capa — pós-fixada é recusada", bloqueou)
 
+# ── Leitura do PDF no servidor Windows ────────────────────────────────────────
+print("\nExtração de texto — independente da codificação do sistema")
+import subprocess
+from types import SimpleNamespace
+from analise.extratores import texto as modulo_texto
+
+
+def _run_como_windows(cmd, **kw):
+    # Em cp1252 o UTF-8 de "Índice" não decodifica e o Windows devolve stdout=None.
+    saida = None if kw.get("text") else "Índice Pós".encode("utf-8")
+    return SimpleNamespace(returncode=0, stdout=saida, stderr=b"")
+
+
+_run_real, _disp_real = subprocess.run, modulo_texto.disponivel
+subprocess.run, modulo_texto.disponivel = _run_como_windows, lambda: True
+try:
+    lido = modulo_texto.extrair_texto("regressao_windows.pdf")
+finally:
+    subprocess.run, modulo_texto.disponivel = _run_real, _disp_real
+    modulo_texto.extrair_texto.cache_clear()
+checa_bool("texto em UTF-8 chega com acento", lido == "Índice Pós")
+
 # ── Resultado ─────────────────────────────────────────────────────────────────
 print()
 if _falhas:
