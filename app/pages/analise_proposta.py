@@ -87,15 +87,18 @@ def _entrada_pdf():
     if not arquivo:
         return None
 
-    caminho = os.path.join(tempfile.gettempdir(), arquivo.name)
-    with open(caminho, "wb") as f:
-        f.write(arquivo.getbuffer())
+    # Pasta única por leitura: o texto extraído fica em cache pelo caminho, e dois PDFs
+    # com o mesmo nome não podem compartilhar caminho.
+    with tempfile.TemporaryDirectory() as pasta:
+        caminho = os.path.join(pasta, os.path.basename(arquivo.name))
+        with open(caminho, "wb") as f:
+            f.write(arquivo.getbuffer())
 
-    try:
-        proposta = extrair(caminho)
-    except (ValueError, PdftotextAusente, RuntimeError) as e:
-        st.error(str(e))
-        return None
+        try:
+            proposta = extrair(caminho)
+        except (ValueError, PdftotextAusente, RuntimeError) as e:
+            st.error(str(e))
+            return None
 
     st.success(
         f"{proposta.banco} · {proposta.sistema} · {proposta.num_parcelas} parcelas · "
