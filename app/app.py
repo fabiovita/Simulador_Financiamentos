@@ -16,7 +16,7 @@ APP_ULTIMA_MODIFICACAO = "10/09/2026"
 
 # ── Autenticação ──────────────────────────────────────────────────────────────
 _auth_path = os.path.join(os.path.dirname(__file__), "config_auth.yaml")
-with open(_auth_path) as _f:
+with open(_auth_path, encoding="utf-8") as _f:
     _auth_config = yaml.safe_load(_f)
 
 authenticator = stauth.Authenticate(
