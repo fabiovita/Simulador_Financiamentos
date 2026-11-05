@@ -4,6 +4,7 @@ Extrator do "Demonstrativo do Plano de Pagamento" do Sicoob.
 Funciona com o PDF emitido pelo sistema (camada de texto). Foto de tela ou
 documento escaneado não passa por aqui — nesses casos a página cai no modo colar.
 """
+import os
 import re
 from datetime import date, datetime
 from typing import List, Optional
@@ -73,7 +74,7 @@ def extrair(caminho_pdf: str) -> Proposta:
         indice_pos=_indice_pos(texto),
         perc_pos=_percentual_bruto(_campo(texto, "% Pós", r"([\d.,]+)")),
         origem="pdf",
-        arquivo=caminho_pdf.split("/")[-1],
+        arquivo=os.path.basename(caminho_pdf),
     )
 
     proposta.totais_impressos = _totais(texto, parcelas)
